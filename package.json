@@ -1,0 +1,28 @@
+{
+  "name": "games.peartree.triggergraph",
+  "version": "1.0.0",
+  "displayName": "TriggerGraph",
+  "description": "Serialized Conditional Reaction Sequence Graph",
+  "unity": "6000.0",
+  "unityRelease": "1f1",
+  "documentationUrl": "https://github.com/peartreegames/trigger-graph",
+  "changelogUrl": "https://github.com/peartreegames/trigger-graph/changelog.html",
+  "licensesUrl": "https://github.com/peartreegames/trigger-graph/LICENSE",
+  "dependencies": {
+    "com.unity.cinemachine": "3.1.2",
+    "com.unity.inputsystem": "1.11.2"
+  },
+  "optionalDependencies": {
+    "games.peartree.evt.variables": "0.3.7"
+  },
+  "keywords": [
+    "peartree",
+    "scriptableobjects",
+    "graphview"
+  ],
+  "author": {
+    "name": "Peartree Games",
+    "email": "bgk@peartree.games",
+    "url": "https://peartree.games"
+  }
+}

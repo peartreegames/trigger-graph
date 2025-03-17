@@ -1,0 +1,21 @@
+
+namespace PeartreeGames.TriggerGraph.Conditions
+{
+    [SearchTree("Condition/True If All Condition")]
+    public class AllCondition: ConditionNode
+    {
+        [Output(PortOrientation.Vertical, PortColor.Yellow)] public static string CheckAllPort => "True If All";
+
+        public override bool CheckIsSatisfied(TriggerContext ctx)
+        {
+            var connections = ctx.Graph.GetNextNodes(this, CheckAllPort);
+            foreach (var connection in connections)
+            {
+                if (connection is ConditionNode condition && !condition.CheckIsSatisfied(ctx))
+                    return false;
+            }
+
+            return true;
+        }
+    }
+}

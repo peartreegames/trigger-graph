@@ -1,0 +1,19 @@
+{
+    "name": "PeartreeGames.TriggerGraph.Evt",
+    "rootNamespace": "PeartreeGames.TriggerGraph.Evt",
+    "references": [
+      "PeartreeGames.TriggerGraph",
+      "PeartreeGames.Evt.Variables"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [
+      "EVT_VARIABLES"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
