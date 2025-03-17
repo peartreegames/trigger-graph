@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -8,6 +7,7 @@ namespace PeartreeGames.TriggerGraph.Editor
     public class TriggerGraphEditorWindow : EditorWindow
     {
         private GlobalObjectId _id;
+        private TriggerGraph _graph;
         private Vector2 _graphPosition;
         private float _graphZoom;
         
@@ -15,6 +15,7 @@ namespace PeartreeGames.TriggerGraph.Editor
         {
             var window = GetWindow<TriggerGraphEditorWindow>();
             window.titleContent = new GUIContent(graph.name);
+            window._graph = graph;
             window._id = GlobalObjectId.GetGlobalObjectIdSlow(graph);
             window.Show();
         }
@@ -25,8 +26,8 @@ namespace PeartreeGames.TriggerGraph.Editor
             var box = new Box { style = { alignItems = Align.Center } };
             box.StretchToParentSize();
             var label = new Label { style = { top = 50 } };
-            var graph = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(_id);
-            if (graph == null) label.text = "TriggerGraph Missing";
+            if (_graph == null) _graph = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(_id) as TriggerGraph;
+            if (_graph == null) label.text = "TriggerGraph Missing";
             rootVisualElement.Clear();
             if (label.text != string.Empty)
             {
@@ -35,7 +36,7 @@ namespace PeartreeGames.TriggerGraph.Editor
                 return;
             }
 
-            var view = new TriggerGraphView(this, graph as TriggerGraph)
+            var view = new TriggerGraphView(this, _graph)
             {
                 name = "Graph"
             };
@@ -45,8 +46,8 @@ namespace PeartreeGames.TriggerGraph.Editor
 
         private void OnEnable()
         {
-            var graph = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(_id);
-            if (graph != null) Init();
+            if (_graph == null) _graph = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(_id) as TriggerGraph;
+            if (_graph != null) Init();
             else
             {
                 EditorApplication.update -= CheckForUserData;
@@ -70,8 +71,8 @@ namespace PeartreeGames.TriggerGraph.Editor
 
         private void CheckForUserData()
         {
-            var graph = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(_id);
-            if (graph == null) return;
+            if (_graph == null) _graph = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(_id) as TriggerGraph;
+            if (_graph == null) return;
             EditorApplication.update -= CheckForUserData;
             Init();
         }

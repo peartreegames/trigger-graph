@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Wait/Wait For Input")]
+    [Serializable, SearchTree("Reaction/Wait/Wait For Input")]
     public class WaitForInputReaction : ReactionNode
     {
         [SerializeField] private InputActionReference[] references;

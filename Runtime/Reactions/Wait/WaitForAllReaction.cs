@@ -6,7 +6,7 @@ using PeartreeGames.TriggerGraph.Utils;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Wait/Wait For All")]
+    [Serializable, SearchTree("Reaction/Wait/Wait For All")]
     public class WaitForAllReaction : ReactionNode
     {
         public class InputConnections : IContextData

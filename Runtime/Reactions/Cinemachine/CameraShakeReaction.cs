@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Cinemachine/Camera Shake Reaction")]
+    [Serializable, SearchTree("Reaction/Cinemachine/Camera Shake Reaction")]
     public class CameraShakeReaction : ReactionNode
     {
         [SerializeField] private Transform source;

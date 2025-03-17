@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/GameObject/Set Active Reaction")]
+    [Serializable, SearchTree("Reaction/GameObject/Set Active Reaction")]
     public class SetActiveReaction : ReactionNode
     {
         [SerializeField] private TargetContext gameObject;

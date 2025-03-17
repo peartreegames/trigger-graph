@@ -80,9 +80,8 @@ namespace PeartreeGames.TriggerGraph.Editor
 
         public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
         {
-            var node = (NodeData)CreateInstance(((Type)searchTreeEntry.userData).FullName);
-            node.ID = Guid.NewGuid();
-
+            var type = (Type)searchTreeEntry.userData;
+            var node = (NodeData)Activator.CreateInstance(type); 
             var worldMousePosition = _editor.rootVisualElement.ChangeCoordinatesTo(
                 _editor.rootVisualElement.parent,
                 context.screenMousePosition - _editor.position.position);
@@ -90,8 +89,8 @@ namespace PeartreeGames.TriggerGraph.Editor
 
             node.nodePosition = localMousePosition;
             _triggerGraph.nodes ??= new List<NodeData>();
-            _view.CreateNode(node);
             _triggerGraph.nodes.Add(node);
+            _view.CreateNode(node);
             return true;
         }
     }

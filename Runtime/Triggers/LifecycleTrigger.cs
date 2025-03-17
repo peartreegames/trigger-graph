@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Triggers
 {
     [SearchTree("Trigger/Lifecycle Trigger")]
+    [Serializable]
     public class LifecycleTrigger : TriggerNode 
     {
         public enum Type

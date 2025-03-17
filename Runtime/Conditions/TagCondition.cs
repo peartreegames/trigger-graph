@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Conditions
 {
-    [SearchTree("Condition/GameObject/Tag Condition")]
+    [Serializable, SearchTree("Condition/GameObject/Tag Condition")]
     public class TagCondition : ConditionNode
     {
         [SerializeField] private TargetContext gameObject;

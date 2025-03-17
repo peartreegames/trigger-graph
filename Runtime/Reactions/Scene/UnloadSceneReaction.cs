@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Scene/Unload Scene Reaction")]
+    [Serializable, SearchTree("Reaction/Scene/Unload Scene Reaction")]
     public class UnloadSceneReaction : ReactionNode
     {
         [SerializeField] private string scene;

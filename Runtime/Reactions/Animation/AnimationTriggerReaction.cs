@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
 
-    [SearchTree("Reaction/Animation/Set Animation Trigger Reaction")]
+    [Serializable, SearchTree("Reaction/Animation/Set Animation Trigger Reaction")]
     public class AnimationTriggerReaction : ReactionNode
     {
         [SerializeField] private Animator animator;

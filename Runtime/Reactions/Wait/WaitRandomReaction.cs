@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Wait/Wait Between Seconds")]
+    [Serializable, SearchTree("Reaction/Wait/Wait Between Seconds")]
     public class WaitRandomReaction : ReactionNode
     {
         [SerializeField] private float minDelay;

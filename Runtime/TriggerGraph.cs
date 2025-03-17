@@ -8,10 +8,11 @@ namespace PeartreeGames.TriggerGraph
     [DisallowMultipleComponent]
     public class TriggerGraph : MonoBehaviour
     {
-        public List<NodeData> nodes = new();
+        [SerializeReference] public List<NodeData> nodes = new();
         public List<EdgeData> edges = new();
         
         public GameObject NextEventInvoker { get; set; }
+        [HideInInspector] public GameObject container;
 
         private void Start()
         {

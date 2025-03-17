@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Conditions
 {
-    [SearchTree("Condition/Renderer/Is Visible Condition")]
+    [Serializable, SearchTree("Condition/Renderer/Is Visible Condition")]
     public class VisibleCondition : ConditionNode
     {
         [SerializeField] private Renderer renderer;

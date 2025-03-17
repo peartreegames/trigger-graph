@@ -1,7 +1,9 @@
 
+using System;
+
 namespace PeartreeGames.TriggerGraph.Conditions
 {
-    [SearchTree("Condition/True If All Condition")]
+    [Serializable, SearchTree("Condition/True If All Condition")]
     public class AllCondition: ConditionNode
     {
         [Output(PortOrientation.Vertical, PortColor.Yellow)] public static string CheckAllPort => "True If All";

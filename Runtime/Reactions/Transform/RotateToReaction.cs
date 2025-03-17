@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using PeartreeGames.TriggerGraph.Utils;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Transform/Rotate To Reaction")]
+    [Serializable, SearchTree("Reaction/Transform/Rotate To Reaction")]
     public class RotateReaction : ReactionNode
     {
         [SerializeField] private TargetContext gameObject;

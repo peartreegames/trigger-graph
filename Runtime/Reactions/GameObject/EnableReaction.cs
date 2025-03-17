@@ -1,9 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/GameObject/Enable Component Reaction")]
+    [Serializable, SearchTree("Reaction/GameObject/Enable Component Reaction")]
     public class EnableReaction : ReactionNode
     {
         [SerializeField] private MonoBehaviour behaviour;

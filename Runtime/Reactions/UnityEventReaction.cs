@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/UnityEvent")]
+    [Serializable, SearchTree("Reaction/Event/UnityEvent")]
     public class UnityEventReaction : ReactionNode
     {
         [SerializeField] private UnityEvent unityEvent;

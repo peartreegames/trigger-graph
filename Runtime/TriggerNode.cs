@@ -1,9 +1,11 @@
+using System;
 using System.Collections;
 using System.Linq;
 using PeartreeGames.TriggerGraph.Utils;
 
 namespace PeartreeGames.TriggerGraph
 {
+    [Serializable]
     public abstract class TriggerNode : NodeData
     {
         public abstract string Tag { get; set; }

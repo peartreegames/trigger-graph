@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Conditions
 {
-    [SearchTree("Condition/GameObject/Name Condition")]
+    [Serializable, SearchTree("Condition/GameObject/Name Condition")]
     public class NameCondition : ConditionNode
     {
         [SerializeField] private TargetContext gameObject;

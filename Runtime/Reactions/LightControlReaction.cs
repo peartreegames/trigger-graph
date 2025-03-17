@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using PeartreeGames.TriggerGraph.Utils;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Light Reaction")]
+    [Serializable, SearchTree("Reaction/Light/Light Reaction")]
     public class LightControlReaction : ReactionNode
     {
         [SerializeField] private Light light;

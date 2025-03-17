@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Triggers
 {
-    [SearchTree("Trigger/Collision Trigger")]
+    [Serializable, SearchTree("Trigger/Collision Trigger")]
     public class CollisionTrigger : TriggerNode 
     {
         public enum Type

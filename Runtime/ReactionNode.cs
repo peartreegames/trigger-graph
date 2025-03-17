@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using PeartreeGames.TriggerGraph.Utils;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph
 {
+    [Serializable]
     public abstract class ReactionNode : NodeData
     {
         public bool IsActive { get; protected set; }

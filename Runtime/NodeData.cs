@@ -4,16 +4,17 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph
 {
-    public abstract class NodeData : ScriptableObject, ISerializationCallbackReceiver, IEquatable<NodeData>
+    [Serializable]
+    public abstract class NodeData : ISerializationCallbackReceiver, IEquatable<NodeData>
     {
-        public Guid ID;
+        public Guid ID = Guid.NewGuid();
         public string nodeIdString;
         public Vector2 nodePosition;
 
 #if UNITY_EDITOR
         #pragma warning disable CS0414
-        [HideInInspector] [SerializeField] private bool isExpanded = true;
-        #pragma warning restore CS0414
+        [HideInInspector] [SerializeField] private bool isFoldoutExpanded = true;
+#pragma warning restore CS0414
 #endif
         public abstract IEnumerator Execute(TriggerContext ctx, NodeData caller);
 
@@ -24,7 +25,7 @@ namespace PeartreeGames.TriggerGraph
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
-            return base.Equals(other) && ID.Equals(other.ID);
+            return Equals(other) && ID.Equals(other.ID);
         }
 
         public override bool Equals(object obj)
@@ -34,7 +35,6 @@ namespace PeartreeGames.TriggerGraph
             return obj.GetType() == GetType() && Equals((NodeData)obj);
         }
 
-        public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), ID);
+        public override int GetHashCode() => ID.GetHashCode();
     }
-
 }

@@ -5,6 +5,7 @@ using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 namespace PeartreeGames.TriggerGraph.Editor
 {
@@ -170,7 +171,7 @@ namespace PeartreeGames.TriggerGraph.Editor
         public TriggerGraphNode CreateNode(NodeData data)
         {
             if (data == null) return null;
-            var node = TriggerGraphNode.Create(data);
+            var node = TriggerGraphNode.Create(_triggerGraph, data);
             AddElement(node);
             return node;
         }

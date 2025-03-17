@@ -7,6 +7,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
+using SerializedObject = UnityEditor.SerializedObject;
 
 namespace PeartreeGames.TriggerGraph.Editor
 {
@@ -20,7 +21,7 @@ namespace PeartreeGames.TriggerGraph.Editor
             { "m_Script", "nodeIdString", "nodePosition" };
 
 
-        public static TriggerGraphNode Create(NodeData data)
+        public static TriggerGraphNode Create(TriggerGraph graph, NodeData data)
         {
             var node = new TriggerGraphNode
             {
@@ -29,7 +30,7 @@ namespace PeartreeGames.TriggerGraph.Editor
                 userData = data,
             };
             
-            var box = CreatePropertyBox(new SerializedObject(data));
+            var box = CreatePropertyBox(graph, data);
             node.extensionContainer.Add(box);
 
             var properties = data.GetType().GetProperties(BindingFlags.Static |
@@ -53,9 +54,12 @@ namespace PeartreeGames.TriggerGraph.Editor
                         throw new CustomAttributeFormatException(
                             "Output can only be added to Strings");
                     var attr = property.GetCustomAttribute<OutputAttribute>();
-                    
+
                     var output =
-                        CreatePort(node, Direction.Output, Port.Capacity.Multi, attr.Orientation == PortOrientation.Horizontal ? Orientation.Horizontal : Orientation.Vertical);
+                        CreatePort(node, Direction.Output, Port.Capacity.Multi,
+                            attr.Orientation == PortOrientation.Horizontal
+                                ? Orientation.Horizontal
+                                : Orientation.Vertical);
                     output.portName = property.GetValue(data) as string;
                     output.portColor = attr.Color.AsColor();
 
@@ -73,7 +77,7 @@ namespace PeartreeGames.TriggerGraph.Editor
                 node.Q<VisualElement>("node-border").style.borderLeftWidth = 5;
                 node.Q<VisualElement>("node-border").style.borderLeftColor = Color.cyan;
             }
-            
+
             node.RefreshExpandedState();
             node.RefreshPorts();
             node.SetPosition(new Rect(data.nodePosition, DefaultSize));
@@ -84,28 +88,36 @@ namespace PeartreeGames.TriggerGraph.Editor
             Port.Capacity capacity, Orientation orientation = Orientation.Horizontal) =>
             node.InstantiatePort(orientation, direction, capacity, typeof(float));
 
-        private static VisualElement CreatePropertyBox(SerializedObject serializedObject)
+        private static VisualElement CreatePropertyBox(TriggerGraph graph, NodeData data)
         {
+            var serializedGraph = new SerializedObject(graph);
             var foldOut = new Foldout();
             foldOut.contentContainer.AddToClassList("property-foldout");
-            var itr = serializedObject.GetIterator();
-            var count = 0;
-            if (itr.NextVisible(true))
+            var arr = serializedGraph.FindProperty("nodes");
+            var idx = graph.nodes.FindIndex(n => n.ID == data.ID);
+            if (idx < 0)
             {
-                do
-                {
-                    if (IgnoredFields.Contains(itr.name)) continue;
-                    var field = new PropertyField(itr);
-                    field.Bind(serializedObject);
-                    foldOut.contentContainer.Add(field);
-                    count++;
-                } while (itr.NextVisible(false));
+                Debug.LogError($"Could not find NodeData {data.ID} in array");
+                return new VisualElement();
+            } 
+            var node = arr.GetArrayElementAtIndex(idx);
+            var fields = data.GetType()
+                .GetFields(BindingFlags.Instance | BindingFlags.Public |
+                           BindingFlags.NonPublic);
+            if (fields.Length == 0) return new VisualElement();
+            foreach (var field in fields)
+            {
+                if (IgnoredFields.Contains(field.Name)) continue;
+                var prop = node.FindPropertyRelative(field.Name);
+                var propField = new PropertyField(prop);
+                propField.Bind(serializedGraph);
+                foldOut.contentContainer.Add(propField);
             }
 
-            if (count == 0) return new VisualElement();
-            if (count == 1) return foldOut.contentContainer.Children().First();
-            foldOut.value = serializedObject.FindProperty("isExpanded").boolValue;
-            foldOut.BindProperty(serializedObject.FindProperty("isExpanded"));
+            if (fields.Length == 1) return foldOut.contentContainer.Children().First();
+            var expand = node.FindPropertyRelative("isFoldoutExpanded");
+            foldOut.value = expand.boolValue;
+            foldOut.BindProperty(expand);
             foldOut.value = true;
             return foldOut;
         }

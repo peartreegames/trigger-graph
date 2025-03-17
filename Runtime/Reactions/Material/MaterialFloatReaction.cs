@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using PeartreeGames.TriggerGraph.Utils;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Material/Set Material Float Reaction")]
+    [Serializable, SearchTree("Reaction/Material/Set Material Float Reaction")]
     public class MaterialFloatReaction : ReactionNode
     {
         [SerializeField] private Renderer renderer;

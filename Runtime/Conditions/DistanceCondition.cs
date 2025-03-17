@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Conditions
 {
-    [SearchTree("Condition/Distance Check Condition")]
+    [Serializable, SearchTree("Condition/Distance Check Condition")]
     public class DistanceCondition : ConditionNode
     {
         [SerializeField] private TargetContext fromGameObject;

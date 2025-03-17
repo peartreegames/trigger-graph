@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/GameObject/Instantiate Reaction")]
+    [Serializable, SearchTree("Reaction/GameObject/Instantiate Reaction")]
     public class InstantiateReaction : ReactionNode
     {
         [SerializeField] private GameObject prefab;
@@ -15,7 +17,7 @@ namespace PeartreeGames.TriggerGraph.Reactions
         {
             for (var i = 0; i < quantity; i++)
             {
-                Instantiate(prefab, spawn.position, spawn.rotation, parent);
+                Object.Instantiate(prefab, spawn.position, spawn.rotation, parent);
                 yield return new WaitForSeconds(delayPerSpawn);
             }
         }

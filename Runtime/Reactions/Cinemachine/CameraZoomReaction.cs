@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using PeartreeGames.TriggerGraph.Utils;
 using Unity.Cinemachine;
@@ -5,7 +6,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Cinemachine/Camera Zoom Reaction")]
+    [Serializable, SearchTree("Reaction/Cinemachine/Camera Zoom Reaction")]
     public class CameraZoomReaction : ReactionNode
     {
         public enum Relativity

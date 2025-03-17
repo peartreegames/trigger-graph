@@ -1,10 +1,11 @@
+using System;
 using System.Collections;
 using PeartreeGames.TriggerGraph.Utils;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Material/Set Material Int Reaction")]
+    [Serializable, SearchTree("Reaction/Material/Set Material Int Reaction")]
     public class MaterialIntReaction : ReactionNode
     {
         [SerializeField] private Renderer renderer;

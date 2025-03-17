@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using PeartreeGames.TriggerGraph.Utils;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Time/Time Scale Reaction")]
+    [Serializable, SearchTree("Reaction/Time/Time Scale Reaction")]
     public class TimeScaleReaction : ReactionNode
     {
         [SerializeField] private Ease ease;

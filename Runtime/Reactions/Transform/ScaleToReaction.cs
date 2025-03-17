@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using PeartreeGames.TriggerGraph.Utils;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [SearchTree("Reaction/Transform/Scale To Reaction")]
+    [Serializable, SearchTree("Reaction/Transform/Scale To Reaction")]
     public class ScaleReaction : ReactionNode
     {
         [SerializeField] private TargetContext gameObject;

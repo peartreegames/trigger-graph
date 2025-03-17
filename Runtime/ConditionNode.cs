@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using PeartreeGames.TriggerGraph.Utils;
 
 namespace PeartreeGames.TriggerGraph
 {
+    [Serializable]
     public abstract class ConditionNode : NodeData
     {
         [Input] public static string InputPort => "Input";
