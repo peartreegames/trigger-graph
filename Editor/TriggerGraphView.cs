@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UIElements;
-using Object = UnityEngine.Object;
 
 namespace PeartreeGames.TriggerGraph.Editor
 {
     public class TriggerGraphView : GraphView
     {
         private readonly TriggerGraph _triggerGraph;
+        private readonly EditorWindow _editor;
         private Edge[] Edges => edges.ToArray();
         private TriggerGraphNode[] Nodes => nodes.Cast<TriggerGraphNode>().ToArray();
-        private NodeSearchWindow _searchWindow;
 
         public TriggerGraphView(EditorWindow editorWindow, TriggerGraph triggerGraph)
         {
+            _editor = editorWindow;
             styleSheets.Add(Resources.Load<StyleSheet>("TriggerGraph"));
             _triggerGraph = triggerGraph;
             this.AddManipulator(new ContentDragger());
@@ -27,12 +28,62 @@ namespace PeartreeGames.TriggerGraph.Editor
             graphViewChanged = OnGraphChanged;
             var grid = new GridBackground();
             Insert(0, grid);
-            _searchWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
-            _searchWindow.Init(editorWindow, this, triggerGraph);
+            var searchWindow = ScriptableObject.CreateInstance<NodeSearchWindow>();
+            searchWindow.Init(_editor, this, triggerGraph);
             nodeCreationRequest = ctx =>
-                SearchWindow.Open(new SearchWindowContext(ctx.screenMousePosition), _searchWindow);
+                SearchWindow.Open(new SearchWindowContext(ctx.screenMousePosition), searchWindow);
             LoadGraph();
+            serializeGraphElements = CopyData;
+            canPasteSerializedData = CanPasteData;
+            unserializeAndPaste = PasteData;
         }
+
+        [Serializable]
+        private class CopyPasteWrapper
+        {
+            public List<NodeData> Nodes;
+        }
+
+        private void PasteData(string operationname, string data)
+        {
+            var settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.Objects
+            };
+            var wrapper = JsonConvert.DeserializeObject<CopyPasteWrapper>(data, settings);
+            foreach (var item in wrapper.Nodes)
+            {
+                item.ID = Guid.NewGuid();
+                _triggerGraph.nodes.Add(item);
+                var node = TriggerGraphNode.Create(_triggerGraph, item);
+                var rect = new Rect(item.nodePosition + new Vector2(50, 50), TriggerGraphNode.DefaultSize);
+                node.SetPosition(rect);
+                AddElement(node);
+            }
+            
+        }
+
+        private static string CopyData(IEnumerable<GraphElement> elements)
+        {
+            var list = new List<NodeData>();
+            foreach (var element in elements)
+            {
+                if (element is TriggerGraphNode node)
+                {
+                    list.Add(node.userData as NodeData);
+                }
+            }
+            
+            var settings = new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                TypeNameHandling = TypeNameHandling.Objects
+            };
+            var json =  JsonConvert.SerializeObject(new CopyPasteWrapper { Nodes = list }, settings);
+            return json;
+        }
+
+        private static bool CanPasteData(string data) => !string.IsNullOrEmpty(data) && data != "{}";
 
 
         private GraphViewChange OnGraphChanged(GraphViewChange graphViewChange)
