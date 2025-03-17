@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -27,7 +25,7 @@ namespace PeartreeGames.TriggerGraph.Editor
             {
                 ID = data.ID,
                 title = data.GetType().Name,
-                userData = data,
+                userData = data
             };
             
             var box = CreatePropertyBox(graph, data);
