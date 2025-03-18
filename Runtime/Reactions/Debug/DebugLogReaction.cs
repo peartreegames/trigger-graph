@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/Debug/Debug Log Reaction")]
+    [Serializable, SearchTree("Reaction/Debug/Debug Log")]
     public class DebugLogReaction : ReactionNode
     {
         [SerializeField] private string message;

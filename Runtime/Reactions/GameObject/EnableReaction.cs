@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/GameObject/Enable Component Reaction")]
+    [Serializable, SearchTree("Reaction/GameObject/Enable Component")]
     public class EnableReaction : ReactionNode
     {
         [SerializeField] private MonoBehaviour behaviour;

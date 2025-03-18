@@ -2,7 +2,7 @@ using System;
 
 namespace PeartreeGames.TriggerGraph.Conditions
 {
-    [Serializable, SearchTree("Condition/True If Any Condition")]
+    [Serializable, SearchTree("Condition/True If Any")]
     public class AnyCondition: ConditionNode
     {
         [Output(PortOrientation.Vertical, PortColor.Yellow)] public static string CheckAnyPort => "True If Any";

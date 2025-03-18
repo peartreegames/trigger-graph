@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Conditions
 {
-    [Serializable, SearchTree("Condition/GameObject/Tag Condition")]
+    [Serializable, SearchTree("Condition/GameObject/Is Tag")]
     public class TagCondition : ConditionNode
     {
         [SerializeField] private TargetContext gameObject;

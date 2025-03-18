@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/NavMeshAgent/Navigate To Destination Reaction")]
+    [Serializable, SearchTree("Reaction/NavMeshAgent/Navigate To Destination")]
     public class NavMoveReaction : ReactionNode
     {
         [SerializeField] private NavMeshAgent agent;

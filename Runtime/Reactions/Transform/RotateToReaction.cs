@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/Transform/Rotate To Reaction")]
+    [Serializable, SearchTree("Reaction/Transform/Rotate To")]
     public class RotateReaction : ReactionNode
     {
         [SerializeField] private TargetContext gameObject;

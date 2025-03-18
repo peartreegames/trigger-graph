@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/Transform/Scale To Reaction")]
+    [Serializable, SearchTree("Reaction/Transform/Scale To")]
     public class ScaleReaction : ReactionNode
     {
         [SerializeField] private TargetContext gameObject;

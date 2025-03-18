@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/Cinemachine/Camera Shake Reaction")]
+    [Serializable, SearchTree("Reaction/Cinemachine/Camera Shake")]
     public class CameraShakeReaction : ReactionNode
     {
         [SerializeField] private Transform source;

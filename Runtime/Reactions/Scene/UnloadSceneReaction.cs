@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/Scene/Unload Scene Reaction")]
+    [Serializable, SearchTree("Reaction/Scene/Unload Scene")]
     public class UnloadSceneReaction : ReactionNode
     {
         [SerializeField] private string scene;

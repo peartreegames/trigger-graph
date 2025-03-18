@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/GameObject/Instantiate Reaction")]
+    [Serializable, SearchTree("Reaction/GameObject/Instantiate")]
     public class InstantiateReaction : ReactionNode
     {
         [SerializeField] private GameObject prefab;

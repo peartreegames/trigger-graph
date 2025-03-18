@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Conditions
 {
-    [Serializable, SearchTree("Condition/GameObject/Is Active Condition")]
+    [Serializable, SearchTree("Condition/GameObject/Is Active")]
     public class ActiveCondition : ConditionNode
     {
         [SerializeField] private TargetContext gameObject;

@@ -5,7 +5,7 @@ using UnityEngine;
 namespace PeartreeGames.TriggerGraph.Reactions
 {
 
-    [Serializable, SearchTree("Reaction/Animation/Set Animation Bool Reaction")]
+    [Serializable, SearchTree("Reaction/Animation/Set Animation Bool")]
     public class AnimationBoolReaction : ReactionNode
     {
         [SerializeField] private Animator animator;

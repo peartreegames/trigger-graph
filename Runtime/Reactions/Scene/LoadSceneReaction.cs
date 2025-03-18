@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/Scene/Load Scene Reaction")]
+    [Serializable, SearchTree("Reaction/Scene/Load Scene")]
     public class LoadSceneReaction : ReactionNode
     {
         [SerializeField] private LoadSceneMode mode;

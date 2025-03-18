@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/Particle/Particle Reaction")]
+    [Serializable, SearchTree("Reaction/Particle/Particle Control")]
     public class ParticleControlReaction : ReactionNode
     {
         public enum State

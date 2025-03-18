@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Reactions
 {
-    [Serializable, SearchTree("Reaction/Material/Set Material Color Reaction")]
+    [Serializable, SearchTree("Reaction/Material/Set Material Color")]
     public class MaterialColorReaction : ReactionNode
     {
         [SerializeField] private Renderer renderer;
