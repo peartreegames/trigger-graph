@@ -17,5 +17,8 @@ namespace PeartreeGames.TriggerGraph
             yield return Coroutines.YieldAll(connections.Select(c =>
                 ctx.Graph.StartCoroutine(c.Execute(ctx, this))));
         }
+        
+        public virtual void OnEnable(TriggerGraph graph) {}
+        public virtual void OnDisable(TriggerGraph graph) {}
     }
 }

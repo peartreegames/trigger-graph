@@ -1,6 +1,6 @@
 {
   "name": "games.peartree.triggergraph",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "displayName": "Trigger Graph",
   "description": "Serialized Conditional Reaction Sequence Graph",
   "unity": "6000.0",
@@ -14,7 +14,7 @@
     "com.unity.nuget.newtonsoft-json": "3.2.1"
   },
   "optionalDependencies": {
-    "games.peartree.evt.variables": "0.3.7"
+    "games.peartree.evt.variables": "0.4.0"
   },
   "keywords": [
     "peartree",

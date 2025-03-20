@@ -11,9 +11,6 @@ namespace PeartreeGames.TriggerGraph
         [SerializeReference] public List<NodeData> nodes = new();
         public List<EdgeData> edges = new();
         
-        public GameObject NextEventInvoker { get; set; }
-        [HideInInspector] public GameObject container;
-
         private void Start()
         {
             ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, LifecycleTrigger.Type.Start.ToString()));
@@ -21,11 +18,19 @@ namespace PeartreeGames.TriggerGraph
 
         private void OnEnable()
         {
+            foreach (var node in nodes)
+            {
+                if (node is TriggerNode trigger) trigger.OnEnable(this);
+            }
             ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, LifecycleTrigger.Type.OnEnable.ToString()));
         }
 
         private void OnDisable()
         {
+            foreach (var node in nodes)
+            {
+                if (node is TriggerNode trigger) trigger.OnDisable(this);
+            }
             ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, LifecycleTrigger.Type.OnDisable.ToString()));
         }
 
@@ -43,14 +48,12 @@ namespace PeartreeGames.TriggerGraph
 
         public void InvokeTrigger(string triggerTag)
         {
-            ExecuteTriggers<EventTrigger>(new TriggerContext(this, NextEventInvoker, triggerTag));
-            NextEventInvoker = null;
+            ExecuteTriggers<EventTrigger>(new TriggerContext(this, null, triggerTag));
         }
 
         public void InvokeTrigger(GameObject invoker, string triggerTag)
         {
             ExecuteTriggers<EventTrigger>(new TriggerContext(this, invoker, triggerTag));
-            NextEventInvoker = null;
         }
         
         private void OnTriggerEnter(Collider other)
