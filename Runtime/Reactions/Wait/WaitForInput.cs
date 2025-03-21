@@ -8,6 +8,7 @@ namespace PeartreeGames.TriggerGraph.Reactions
     [Serializable, SearchTree("Reaction/Wait/Wait For Input")]
     public class WaitForInputReaction : ReactionNode
     {
+        [SerializeField] private InputActionPhase phase; 
         [SerializeField] private InputActionReference[] references;
 
         public override IEnumerator React(TriggerContext ctx, NodeData caller)
@@ -16,7 +17,7 @@ namespace PeartreeGames.TriggerGraph.Reactions
             {
                 foreach (var reference in references)
                 {
-                    if (reference.action.phase != InputActionPhase.Started) continue;
+                    if (reference.action.phase != phase) continue;
                     yield break;
                 }
 
