@@ -19,10 +19,10 @@ namespace PeartreeGames.TriggerGraph
         {
             IsActive = true;
             yield return React(ctx, this);
+            IsActive = false;
             var connections = ctx.Graph.GetNextNodes(this, OnCompletePort);
             yield return Coroutines.YieldAll(connections.Select(c =>
                 ctx.Graph.StartCoroutine(c.Execute(ctx, this))));
-            IsActive = false;
         }
     }
 }

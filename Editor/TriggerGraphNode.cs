@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -12,6 +13,8 @@ namespace PeartreeGames.TriggerGraph.Editor
     public class TriggerGraphNode : Node
     {
         public Guid ID;
+        private VisualElement _border;
+        private StyleColor _borderColor;
 
         public static readonly Vector2 DefaultSize = new(100, 200);
 
@@ -27,7 +30,7 @@ namespace PeartreeGames.TriggerGraph.Editor
                 title = data.GetType().Name,
                 userData = data
             };
-            
+
             var box = CreatePropertyBox(graph, data);
             node.extensionContainer.Add(box);
 
@@ -70,16 +73,41 @@ namespace PeartreeGames.TriggerGraph.Editor
                 }
             }
 
+            node._border = node.Q<VisualElement>("node-border");
+            node._borderColor = node._border.style.borderBottomColor;
             if (data is TriggerNode)
             {
-                node.Q<VisualElement>("node-border").style.borderLeftWidth = 5;
-                node.Q<VisualElement>("node-border").style.borderLeftColor = Color.cyan;
+                node._border.style.borderLeftWidth = 5;
+                node._border.style.borderLeftColor = Color.cyan;
             }
 
             node.RefreshExpandedState();
             node.RefreshPorts();
             node.SetPosition(new Rect(data.nodePosition, DefaultSize));
+            if (data is ReactionNode) EditorApplication.update += node.IsActivePoll;
             return node;
+        }
+
+        private void IsActivePoll()
+        {
+            if (userData is not ReactionNode react) return;
+            if (react.IsActive)
+            {
+                _border.style.borderBottomWidth = 5;
+                _border.style.borderBottomColor = Color.cyan;
+            }
+            else
+            {
+                _border.style.borderBottomWidth = 1;
+                _border.style.borderBottomColor = _borderColor;
+            }
+
+            _border.MarkDirtyRepaint();
+        }
+
+        ~TriggerGraphNode()
+        {
+            EditorApplication.update -= IsActivePoll;
         }
 
         private static Port CreatePort(TriggerGraphNode node, Direction direction,
@@ -97,11 +125,13 @@ namespace PeartreeGames.TriggerGraph.Editor
             {
                 Debug.LogError($"Could not find NodeData {data.ID} in array");
                 return new VisualElement();
-            } 
+            }
+
             var node = arr.GetArrayElementAtIndex(idx);
             var fields = data.GetType()
                 .GetFields(BindingFlags.Instance | BindingFlags.Public |
                            BindingFlags.NonPublic);
+
             if (fields.Length == 0) return new VisualElement();
             foreach (var field in fields)
             {

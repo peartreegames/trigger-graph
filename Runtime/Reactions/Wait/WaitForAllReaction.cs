@@ -30,11 +30,11 @@ namespace PeartreeGames.TriggerGraph.Reactions
                 if (!data.Ids.Contains(conn.ID)) yield break;
             }
 
+            IsActive = false;
             data.Ids.Clear();
             var connections = ctx.Graph.GetNextNodes(this, OnCompletePort);
             yield return Coroutines.YieldAll(connections.Select(c =>
                 ctx.Graph.StartCoroutine(c.Execute(ctx, this))));
-            IsActive = false;
         }
     }
 }
