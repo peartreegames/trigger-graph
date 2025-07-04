@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
-    [SearchTree("Condition/Evt/String")]
+    [SearchTree("Condition/Evt/String Condition")]
     public class StringCondition : ConditionNode
     {
         [SerializeField] private EvtVariable<string> variable;

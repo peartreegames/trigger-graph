@@ -1,5 +1,4 @@
 ﻿using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -29,7 +28,6 @@ namespace PeartreeGames.TriggerGraph.Editor
             var label = new Label { style = { top = 50 } };
             if (_graph == null) _graph = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(id) as TriggerGraph;
             if (_graph == null) label.text = "TriggerGraph Missing";
-            rootVisualElement.Clear();
             if (label.text != string.Empty)
             {
                 box.Add(label);

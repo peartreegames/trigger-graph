@@ -6,7 +6,7 @@ using PeartreeGames.TriggerGraph.Utils;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
-    [SearchTree("Condition/Evt/Float")]
+    [SearchTree("Condition/Evt/Float Condition")]
     public class FloatCondition : ConditionNode
     {
         [SerializeField] private EvtVariable<float> variable;

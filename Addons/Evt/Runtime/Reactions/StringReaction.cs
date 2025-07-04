@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
-    [SearchTree("Reaction/Evt/String")]
+    [SearchTree("Reaction/Evt/String Reaction")]
     public class StringReaction : ReactionNode
     {
         [SerializeField] private EvtString variable;

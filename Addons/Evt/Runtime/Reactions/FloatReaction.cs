@@ -6,7 +6,7 @@ using PeartreeGames.TriggerGraph.Utils;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
-    [SearchTree("Reaction/Evt/Float")]
+    [SearchTree("Reaction/Evt/Float Reaction")]
     public class FloatReaction : ReactionNode
     {
         [SerializeField] private EvtFloat variable;

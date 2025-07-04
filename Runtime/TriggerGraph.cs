@@ -13,7 +13,7 @@ namespace PeartreeGames.TriggerGraph
         
         private void Start()
         {
-            ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, LifecycleTrigger.Type.Start.ToString()));
+            ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, nameof(LifecycleTrigger.Type.Start)));
         }
 
         private void OnEnable()
@@ -22,7 +22,7 @@ namespace PeartreeGames.TriggerGraph
             {
                 if (node is TriggerNode trigger) trigger.OnEnable(this);
             }
-            ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, LifecycleTrigger.Type.OnEnable.ToString()));
+            ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, nameof(LifecycleTrigger.Type.OnEnable)));
         }
 
         private void OnDisable()
@@ -31,7 +31,7 @@ namespace PeartreeGames.TriggerGraph
             {
                 if (node is TriggerNode trigger) trigger.OnDisable(this);
             }
-            ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, LifecycleTrigger.Type.OnDisable.ToString()));
+            ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, nameof(LifecycleTrigger.Type.OnDisable)));
         }
 
         private void ExecuteTriggers<T>(TriggerContext ctx) where T : TriggerNode
@@ -46,12 +46,12 @@ namespace PeartreeGames.TriggerGraph
             }
         }
 
-        public void InvokeTrigger(string triggerTag)
+        public void InvokeEventTrigger(string triggerTag)
         {
             ExecuteTriggers<EventTrigger>(new TriggerContext(this, null, triggerTag));
         }
 
-        public void InvokeTrigger(GameObject invoker, string triggerTag)
+        public void InvokeEventTrigger(GameObject invoker, string triggerTag)
         {
             ExecuteTriggers<EventTrigger>(new TriggerContext(this, invoker, triggerTag));
         }
@@ -59,25 +59,25 @@ namespace PeartreeGames.TriggerGraph
         private void OnTriggerEnter(Collider other)
         {
             ExecuteTriggers<CollisionTrigger>(new TriggerContext(this, other.gameObject,
-                CollisionTrigger.Type.TriggerEnter.ToString()));
+                nameof(CollisionTrigger.Type.TriggerEnter)));
         }
 
         private void OnTriggerExit(Collider other)
         {
             ExecuteTriggers<CollisionTrigger>(new TriggerContext(this, other.gameObject,
-                CollisionTrigger.Type.TriggerExit.ToString()));
+                nameof(CollisionTrigger.Type.TriggerExit)));
         }
 
         private void OnCollisionEnter(Collision other)
         {
             ExecuteTriggers<CollisionTrigger>(new TriggerContext(this, other.gameObject,
-                CollisionTrigger.Type.CollisionEnter.ToString()));
+                nameof(CollisionTrigger.Type.CollisionEnter)));
         }
 
         private void OnCollisionExit(Collision other)
         {
             ExecuteTriggers<CollisionTrigger>(new TriggerContext(this, other.gameObject,
-                CollisionTrigger.Type.CollisionExit.ToString()));
+                nameof(CollisionTrigger.Type.CollisionExit)));
         }
 
         private List<T> GetTriggerNodes<T>() where T : TriggerNode =>

@@ -4,7 +4,7 @@ using PeartreeGames.Evt.Variables;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
-    [SearchTree("Reaction/Evt/Bool")]
+    [SearchTree("Reaction/Evt/Bool Reaction")]
     public class BoolReaction : ReactionNode
     {
         [SerializeField] private EvtBool variable;

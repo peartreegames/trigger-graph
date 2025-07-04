@@ -3,7 +3,7 @@ using PeartreeGames.Evt.Variables;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
-    [SearchTree("Condition/Evt/Bool")]
+    [SearchTree("Condition/Evt/Bool Condition")]
     public class BoolCondition : ConditionNode
     {
         [SerializeField] private EvtVariable<bool> variable;

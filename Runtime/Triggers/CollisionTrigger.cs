@@ -18,7 +18,7 @@ namespace PeartreeGames.TriggerGraph.Triggers
         public override string Tag
         {
             get => Collision.ToString();
-            set => throw new System.NotImplementedException();
+            set => throw new NotImplementedException();
         }
     }
 }

@@ -6,7 +6,7 @@ using PeartreeGames.TriggerGraph.Utils;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
-    [SearchTree("Reaction/Evt/Int")]
+    [SearchTree("Reaction/Evt/Int Reaction")]
     public class IntReaction : ReactionNode
     {
         [SerializeField] private EvtInt variable;

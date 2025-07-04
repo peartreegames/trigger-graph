@@ -5,7 +5,7 @@ using PeartreeGames.TriggerGraph.Utils;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
-    [SearchTree("Condition/Evt/Int")]
+    [SearchTree("Condition/Evt/Int Condition")]
     public class IntCondition : ConditionNode
     {
         [SerializeField] private EvtVariable<int> variable;
