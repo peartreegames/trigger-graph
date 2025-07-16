@@ -91,6 +91,8 @@ namespace PeartreeGames.TriggerGraph.Editor
         {
             var type = (Type)searchTreeEntry.userData;
             var node = (NodeData)Activator.CreateInstance(type);
+            Undo.RecordObject(_triggerGraph, "Create Node");
+            
             var worldMousePosition = _editor.rootVisualElement.ChangeCoordinatesTo(
                 _editor.rootVisualElement.parent,
                 context.screenMousePosition - _editor.position.position);

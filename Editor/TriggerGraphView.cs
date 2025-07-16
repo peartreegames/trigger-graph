@@ -49,6 +49,11 @@ namespace PeartreeGames.TriggerGraph.Editor
 
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
         }
+        
+        ~TriggerGraphView()
+        {
+            Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+        }
 
         private static void OnKeyDown(KeyDownEvent evt)
         {
