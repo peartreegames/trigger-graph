@@ -18,7 +18,7 @@ namespace PeartreeGames.TriggerGraph.Triggers
         public override string Tag
         {
             get => Lifecycle.ToString();
-            set => throw new System.NotImplementedException();
+            set => Lifecycle = Enum.Parse<Type>(value);
         }
     }
 }

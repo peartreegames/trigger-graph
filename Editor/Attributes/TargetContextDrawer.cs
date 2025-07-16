@@ -17,7 +17,7 @@ namespace PeartreeGames.TriggerGraph.Editor.Attributes
             {
                 label = property.displayName
             };
-            targetField.Bind(targetProp.serializedObject);
+            targetField.BindProperty(targetProp);
             container.Add(targetField);
 
             var gameObjectContainer = new VisualElement
@@ -37,9 +37,9 @@ namespace PeartreeGames.TriggerGraph.Editor.Attributes
             {
                 gameObjectContainer.Clear();
                 if (i != (int)TargetContext.Target.SceneObject) return;
-                var gameObjectField =
-                    new PropertyField(property.FindPropertyRelative("gameObject"));
-                gameObjectField.Bind(targetProp.serializedObject);
+                var goProp = property.FindPropertyRelative("gameObject");
+                var gameObjectField = new PropertyField(goProp);
+                gameObjectField.BindProperty(goProp);
                 gameObjectContainer.Add(gameObjectField);
             }
         }

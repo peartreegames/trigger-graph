@@ -15,11 +15,20 @@ namespace PeartreeGames.TriggerGraph.Editor
         private EditorWindow _editor;
         private TriggerGraph _triggerGraph;
 
+        private Port _sourcePort;
+        private bool _isAutoConnecting;
+
         public void Init(EditorWindow editor, TriggerGraphView view, TriggerGraph graph)
         {
             _editor = editor;
             _view = view;
             _triggerGraph = graph;
+        }
+
+        public void SetAutoConnectPort(Port sourcePort)
+        {
+            _sourcePort = sourcePort;
+            _isAutoConnecting = sourcePort != null;
         }
 
         public List<SearchTreeEntry> CreateSearchTree(SearchWindowContext context)
@@ -81,7 +90,7 @@ namespace PeartreeGames.TriggerGraph.Editor
         public bool OnSelectEntry(SearchTreeEntry searchTreeEntry, SearchWindowContext context)
         {
             var type = (Type)searchTreeEntry.userData;
-            var node = (NodeData)Activator.CreateInstance(type); 
+            var node = (NodeData)Activator.CreateInstance(type);
             var worldMousePosition = _editor.rootVisualElement.ChangeCoordinatesTo(
                 _editor.rootVisualElement.parent,
                 context.screenMousePosition - _editor.position.position);
@@ -90,7 +99,15 @@ namespace PeartreeGames.TriggerGraph.Editor
             node.nodePosition = localMousePosition;
             _triggerGraph.nodes ??= new List<NodeData>();
             _triggerGraph.nodes.Add(node);
-            _view.CreateNode(node);
+            var createdNode = _view.CreateNode(node);
+
+            if (_isAutoConnecting && _sourcePort != null && createdNode != null)
+            {
+                _view.AutoConnectToCreatedNode(createdNode, _sourcePort);
+            }
+
+            _sourcePort = null;
+            _isAutoConnecting = false;
             return true;
         }
     }

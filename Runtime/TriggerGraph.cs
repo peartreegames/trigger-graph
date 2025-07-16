@@ -11,6 +11,9 @@ namespace PeartreeGames.TriggerGraph
         [SerializeReference] public List<NodeData> nodes = new();
         public List<EdgeData> edges = new();
         
+        [HideInInspector] public Vector3 viewPosition = Vector3.zero;
+        [HideInInspector] public Vector3 viewScale = Vector3.one;
+        
         private void Start()
         {
             ExecuteTriggers<LifecycleTrigger>(new TriggerContext(this, gameObject, nameof(LifecycleTrigger.Type.Start)));

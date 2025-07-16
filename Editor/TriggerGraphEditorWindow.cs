@@ -70,9 +70,9 @@ namespace PeartreeGames.TriggerGraph.Editor
 
         private void CheckForUserData()
         {
+            EditorApplication.update -= CheckForUserData;
             if (_graph == null) _graph = GlobalObjectId.GlobalObjectIdentifierToObjectSlow(id) as TriggerGraph;
             if (_graph == null) return;
-            EditorApplication.update -= CheckForUserData;
             Init();
         }
 

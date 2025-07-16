@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -22,7 +21,8 @@ namespace PeartreeGames.TriggerGraph.Editor
             { "m_Script", "nodeIdString", "nodePosition" };
 
 
-        public static TriggerGraphNode Create(TriggerGraph graph, NodeData data)
+        public static TriggerGraphNode Create(TriggerGraphView view, TriggerGraph graph,
+            NodeData data)
         {
             var node = new TriggerGraphNode
             {
@@ -44,8 +44,7 @@ namespace PeartreeGames.TriggerGraph.Editor
                     if (property.PropertyType != typeof(string))
                         throw new CustomAttributeFormatException(
                             "Input can only be added to Strings");
-                    var input =
-                        CreatePort(node, Direction.Input, Port.Capacity.Multi);
+                    var input = CreatePort(view, node, Direction.Input, Port.Capacity.Multi);
                     input.portName = property.GetValue(data) as string;
                     node.inputContainer.Add(input);
                 }
@@ -56,11 +55,10 @@ namespace PeartreeGames.TriggerGraph.Editor
                             "Output can only be added to Strings");
                     var attr = property.GetCustomAttribute<OutputAttribute>();
 
-                    var output =
-                        CreatePort(node, Direction.Output, Port.Capacity.Multi,
-                            attr.Orientation == PortOrientation.Horizontal
-                                ? Orientation.Horizontal
-                                : Orientation.Vertical);
+                    var output = CreatePort(view, node, Direction.Output, Port.Capacity.Multi,
+                        attr.Orientation == PortOrientation.Horizontal
+                            ? Orientation.Horizontal
+                            : Orientation.Vertical);
                     output.portName = property.GetValue(data) as string;
                     output.portColor = attr.Color.AsColor();
 
@@ -75,44 +73,38 @@ namespace PeartreeGames.TriggerGraph.Editor
 
             node._border = node.Q<VisualElement>("node-border");
             node._borderColor = node._border.style.borderBottomColor;
-            if (data is TriggerNode)
+            switch (data)
             {
-                node._border.style.borderLeftWidth = 5;
-                node._border.style.borderLeftColor = Color.cyan;
+                case TriggerNode:
+                    node.AddToClassList("trigger-node");
+                    node._border.style.borderLeftWidth = 5;
+                    node._border.style.borderLeftColor = Color.cyan;
+                    break;
+                case ConditionNode:
+                    node.AddToClassList("condition-node");
+                    break;
+                case ReactionNode:
+                    node.AddToClassList("reaction-node");
+                    break;
             }
 
             node.RefreshExpandedState();
             node.RefreshPorts();
             node.SetPosition(new Rect(data.nodePosition, DefaultSize));
-            if (data is ReactionNode) EditorApplication.update += node.IsActivePoll;
             return node;
         }
 
-        private void IsActivePoll()
+
+        private static Port CreatePort(TriggerGraphView view, TriggerGraphNode node,
+            Direction direction,
+            Port.Capacity capacity, Orientation orientation = Orientation.Horizontal)
         {
-            if (userData is not ReactionNode react) return;
-            if (react.IsActive)
-            {
-                _border.style.borderBottomWidth = 5;
-                _border.style.borderBottomColor = Color.cyan;
-            }
-            else
-            {
-                _border.style.borderBottomWidth = 1;
-                _border.style.borderBottomColor = _borderColor;
-            }
+            var port = node.InstantiatePort(orientation, direction, capacity, typeof(float));
+            var connector = new EdgeConnector<Edge>(new EdgeConnectorListener(view));
+            port.AddManipulator(connector);
 
-            _border.MarkDirtyRepaint();
+            return port;
         }
-
-        ~TriggerGraphNode()
-        {
-            EditorApplication.update -= IsActivePoll;
-        }
-
-        private static Port CreatePort(TriggerGraphNode node, Direction direction,
-            Port.Capacity capacity, Orientation orientation = Orientation.Horizontal) =>
-            node.InstantiatePort(orientation, direction, capacity, typeof(float));
 
         private static VisualElement CreatePropertyBox(TriggerGraph graph, NodeData data)
         {
@@ -137,8 +129,9 @@ namespace PeartreeGames.TriggerGraph.Editor
             {
                 if (IgnoredFields.Contains(field.Name)) continue;
                 var prop = node.FindPropertyRelative(field.Name);
+                if (prop == null) continue;
                 var propField = new PropertyField(prop);
-                propField.Bind(serializedGraph);
+                propField.BindProperty(prop);
                 foldOut.contentContainer.Add(propField);
             }
 

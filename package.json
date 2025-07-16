@@ -1,6 +1,6 @@
 {
   "name": "games.peartree.triggergraph",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "displayName": "Trigger Graph",
   "description": "Serialized Conditional Reaction Sequence Graph",
   "unity": "6000.0",
