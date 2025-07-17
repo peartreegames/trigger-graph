@@ -93,6 +93,7 @@ namespace PeartreeGames.TriggerGraph.Editor
                 _triggerGraph.viewScale = viewTransform.scale;
                 EditorUtility.SetDirty(_triggerGraph);
             }
+
             _lastViewTransformSaveTime = Time.realtimeSinceStartup;
         }
 
@@ -110,32 +111,60 @@ namespace PeartreeGames.TriggerGraph.Editor
         private class CopyPasteWrapper
         {
             public List<NodeData> Nodes;
+            public List<EdgeData> Edges;
             public Vector2 centerPosition;
         }
 
         private static string CopyData(IEnumerable<GraphElement> elements)
         {
-            var list = new List<NodeData>();
+            var nodes = new List<NodeData>();
+            var edges = new List<EdgeData>();
             var positions = new List<Vector2>();
-            foreach (var element in elements)
-            {
-                if (element is TriggerGraphNode node)
-                {
-                    if (node.userData is not NodeData nodeData) continue;
-                    var settings = new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                        TypeNameHandling = TypeNameHandling.Objects,
-                        TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
-                        ContractResolver = new UnitySerializeFieldContractResolver(),
-                        Converters = new List<JsonConverter> { new UnityObjectJsonConverter() }
-                    };
-                    var json = JsonConvert.SerializeObject(nodeData, settings);
-                    var copiedNodeData = JsonConvert.DeserializeObject<NodeData>(json, settings);
+            var nodeIds = new HashSet<Guid>();
 
-                    list.Add(copiedNodeData);
-                    positions.Add(nodeData.nodePosition);
-                }
+            var array = elements as GraphElement[] ?? elements.ToArray();
+            // Collect all nodes first
+            foreach (var element in array)
+            {
+                if (element is not TriggerGraphNode node) continue;
+                if (node.userData is not NodeData nodeData) continue;
+                var settings = new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    TypeNameHandling = TypeNameHandling.Objects,
+                    TypeNameAssemblyFormatHandling = TypeNameAssemblyFormatHandling.Simple,
+                    ContractResolver = new UnitySerializeFieldContractResolver(),
+                    Converters = new List<JsonConverter> { new UnityObjectJsonConverter() }
+                };
+                var json = JsonConvert.SerializeObject(nodeData, settings);
+                var copiedNodeData = JsonConvert.DeserializeObject<NodeData>(json, settings);
+
+                nodes.Add(copiedNodeData);
+                positions.Add(nodeData.nodePosition);
+                nodeIds.Add(nodeData.ID);
+            }
+
+            // Then collect edges
+            foreach (var element in array)
+            {
+                if (element is not Edge edge) continue;
+                var outputNode = (TriggerGraphNode)edge.output.node;
+                var inputNode = (TriggerGraphNode)edge.input.node;
+                var outputNodeId = outputNode.ID;
+                var inputNodeId = inputNode.ID;
+
+                var outputNodeCopied = nodeIds.Contains(outputNodeId);
+                var inputNodeCopied = nodeIds.Contains(inputNodeId);
+
+                if (!outputNodeCopied && !inputNodeCopied) continue;
+                var edgeData = new EdgeData
+                {
+                    OutputId = outputNodeId,
+                    outputPortName = edge.output.portName,
+                    InputId = inputNodeId,
+                    inputPortName = edge.input.portName
+                };
+                edges.Add(edgeData);
             }
 
             var centerPosition = Vector2.zero;
@@ -148,7 +177,8 @@ namespace PeartreeGames.TriggerGraph.Editor
 
             var wrapper = new CopyPasteWrapper
             {
-                Nodes = list,
+                Nodes = nodes,
+                Edges = edges,
                 centerPosition = centerPosition
             };
 
@@ -183,33 +213,69 @@ namespace PeartreeGames.TriggerGraph.Editor
             var offset = localMousePosition - wrapper.centerPosition;
 
             var pastedNodeIds = new List<Guid>();
+            var oldToNewNodeIdMap = new Dictionary<Guid, Guid>();
+
 
             foreach (var item in wrapper.Nodes)
             {
-                item.ID = Guid.NewGuid();
+                var oldId = item.ID;
+                var newId = Guid.NewGuid();
+                item.ID = newId;
                 item.nodePosition += offset;
                 _triggerGraph.nodes.Add(item);
                 pastedNodeIds.Add(item.ID);
+                oldToNewNodeIdMap[oldId] = newId;
+            }
+
+            foreach (var edge in wrapper.Edges)
+            {
+                var outputNodeId = edge.OutputId;
+                var inputNodeId = edge.InputId;
+
+                // Check if both nodes were copied
+                var outputNodeCopied = oldToNewNodeIdMap.ContainsKey(outputNodeId);
+                var inputNodeCopied = oldToNewNodeIdMap.ContainsKey(inputNodeId);
+
+                var edgeData = outputNodeCopied switch
+                {
+                    // Both nodes copied - create edge between new nodes
+                    true when inputNodeCopied => new EdgeData
+                    {
+                        OutputId = oldToNewNodeIdMap[outputNodeId],
+                        outputPortName = edge.outputPortName,
+                        InputId = oldToNewNodeIdMap[inputNodeId],
+                        inputPortName = edge.inputPortName
+                    },
+                    // Only output node copied - create edge from new output node to existing input node
+                    true => new EdgeData
+                    {
+                        OutputId = oldToNewNodeIdMap[outputNodeId],
+                        outputPortName = edge.outputPortName,
+                        InputId = inputNodeId,
+                        inputPortName = edge.inputPortName
+                    },
+                    false when inputNodeCopied => new EdgeData
+                    {
+                        OutputId = outputNodeId,
+                        outputPortName = edge.outputPortName,
+                        InputId = oldToNewNodeIdMap[inputNodeId],
+                        inputPortName = edge.inputPortName
+                    },
+                    _ => null
+                };
+                if (edgeData != null) _triggerGraph.edges.Add(edgeData);
             }
 
             EditorUtility.SetDirty(_triggerGraph);
-
-            var pastedNodes = new List<TriggerGraphNode>();
+            ClearSelection();
+            ClearGraph();
+            RecreateGraph();
+            
             foreach (var nodeId in pastedNodeIds)
             {
-                var nodeData = _triggerGraph.nodes.FirstOrDefault(n => n.ID == nodeId);
-                if (nodeData != null)
-                {
-                    var node = TriggerGraphNode.Create(this, _triggerGraph, nodeData);
-                    var rect = new Rect(nodeData.nodePosition, TriggerGraphNode.DefaultSize);
-                    node.SetPosition(rect);
-                    AddElement(node);
-                    pastedNodes.Add(node);
-                }
+                var node = Nodes.FirstOrDefault(n => n.ID == nodeId);
+                AddToSelection(node);
             }
-
-            ClearSelection();
-            foreach (var node in pastedNodes) AddToSelection(node);
         }
 
         private static bool CanPasteData(string data) =>
