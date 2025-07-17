@@ -15,6 +15,8 @@ namespace PeartreeGames.TriggerGraph.Editor
         private readonly EditorWindow _editor;
         public readonly NodeSearchWindow SearchWindow;
         private Vector2 _lastMousePosition;
+        private float _lastViewTransformSaveTime;
+        private const float ViewTransformSaveDelay = 0.25f;
         private Edge[] Edges => edges.ToArray();
         private TriggerGraphNode[] Nodes => nodes.Cast<TriggerGraphNode>().ToArray();
 
@@ -49,7 +51,7 @@ namespace PeartreeGames.TriggerGraph.Editor
 
             Undo.undoRedoPerformed += OnUndoRedoPerformed;
         }
-        
+
         ~TriggerGraphView()
         {
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
@@ -81,13 +83,17 @@ namespace PeartreeGames.TriggerGraph.Editor
             SaveViewTransform();
         }
 
+
         private void SaveViewTransform()
         {
             if (_triggerGraph == null) return;
-
-            _triggerGraph.viewPosition = viewTransform.position;
-            _triggerGraph.viewScale = viewTransform.scale;
-            EditorUtility.SetDirty(_triggerGraph);
+            if (Time.realtimeSinceStartup - _lastViewTransformSaveTime < ViewTransformSaveDelay)
+            {
+                _triggerGraph.viewPosition = viewTransform.position;
+                _triggerGraph.viewScale = viewTransform.scale;
+                EditorUtility.SetDirty(_triggerGraph);
+            }
+            _lastViewTransformSaveTime = Time.realtimeSinceStartup;
         }
 
 
@@ -214,9 +220,11 @@ namespace PeartreeGames.TriggerGraph.Editor
         {
             if (_triggerGraph == null) return graphViewChange;
 
-            Undo.RecordObject(_triggerGraph, "Graph Changed");
+            var hasStructuralChanges = graphViewChange.edgesToCreate != null ||
+                                       graphViewChange.elementsToRemove != null ||
+                                       graphViewChange.movedElements != null;
 
-            SaveViewTransform();
+            if (hasStructuralChanges) Undo.RecordObject(_triggerGraph, "Graph Changed");
             if (graphViewChange.edgesToCreate != null)
             {
                 foreach (var edge in graphViewChange.edgesToCreate)
@@ -275,7 +283,7 @@ namespace PeartreeGames.TriggerGraph.Editor
                 }
             }
 
-            EditorUtility.SetDirty(_triggerGraph);
+            if (hasStructuralChanges) EditorUtility.SetDirty(_triggerGraph);
             return graphViewChange;
         }
 

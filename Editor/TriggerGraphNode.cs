@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -130,7 +131,29 @@ namespace PeartreeGames.TriggerGraph.Editor
                 if (IgnoredFields.Contains(field.Name)) continue;
                 var prop = node.FindPropertyRelative(field.Name);
                 if (prop == null) continue;
+
                 var propField = new PropertyField(prop);
+
+                if (prop.propertyType == SerializedPropertyType.String)
+                {
+                    var textField = propField.Q<TextField>();
+                    if (textField != null)
+                    {
+                        textField.RegisterCallback<KeyDownEvent>(evt =>
+                        {
+                            if (evt.keyCode is KeyCode.Return or KeyCode.KeypadEnter)
+                            {
+                                EditorUtility.SetDirty(graph);
+                            }
+                        });
+
+                        textField.RegisterCallback<BlurEvent>(evt =>
+                        {
+                            EditorUtility.SetDirty(graph);
+                        });
+                    }
+                }
+
                 propField.BindProperty(prop);
                 foldOut.contentContainer.Add(propField);
             }
