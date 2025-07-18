@@ -89,9 +89,18 @@ namespace PeartreeGames.TriggerGraph.Editor
                     break;
             }
 
+            var titleLabel = node.Q<Label>();
+            if (titleLabel != null)
+            {
+                titleLabel.style.fontSize = 20;
+                titleLabel.style.unityFontStyleAndWeight = FontStyle.Bold;
+                titleLabel.AddToClassList("title-label");
+            }
+
             node.RefreshExpandedState();
             node.RefreshPorts();
             node.SetPosition(new Rect(data.nodePosition, DefaultSize));
+            node.AddToClassList(data.GetType().Name.ToLower());
             return node;
         }
 
