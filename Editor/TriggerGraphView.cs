@@ -23,6 +23,7 @@ namespace PeartreeGames.TriggerGraph.Editor
         public TriggerGraphView(EditorWindow editorWindow, TriggerGraph triggerGraph)
         {
             styleSheets.Add(Resources.Load<StyleSheet>("TriggerGraph"));
+            LoadCustomStyleSheets();
             _triggerGraph = triggerGraph;
             this.AddManipulator(new ContentDragger());
             this.AddManipulator(new SelectionDragger());
@@ -55,6 +56,19 @@ namespace PeartreeGames.TriggerGraph.Editor
         ~TriggerGraphView()
         {
             Undo.undoRedoPerformed -= OnUndoRedoPerformed;
+        }
+
+        private void LoadCustomStyleSheets()
+        {
+            var guids = AssetDatabase.FindAssets("t:StyleSheet", new[] { "Assets" });
+
+            foreach (var guid in guids)
+            {
+                var path = AssetDatabase.GUIDToAssetPath(guid);
+                if (!path.Contains("TriggerGraph")) continue;
+                var styleSheet = AssetDatabase.LoadAssetAtPath<StyleSheet>(path);
+                if (styleSheet != null) styleSheets.Add(styleSheet);
+            }
         }
 
         private static void OnKeyDown(KeyDownEvent evt)
@@ -270,7 +284,7 @@ namespace PeartreeGames.TriggerGraph.Editor
             ClearSelection();
             ClearGraph();
             RecreateGraph();
-            
+
             foreach (var nodeId in pastedNodeIds)
             {
                 var node = Nodes.FirstOrDefault(n => n.ID == nodeId);
