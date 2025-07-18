@@ -1,5 +1,5 @@
 ﻿#collapsible-area {
-    background-color: rgba(62,62,62, 205);
+    background-color: rgba(62,62,62, 1);
 }
 
 #extension {
@@ -27,3 +27,35 @@
 .toolbar {
     justify-content: flex-end;
 }
+
+.unity-property-field {
+    -unity-font-style: bold;
+}
+
+.unity-base-field {
+    -unity-font-style: bold;
+}
+
+.connectorText {
+    -unity-font-style: bold;
+}
+
+.unity-text-element--inner-input-field-component {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    max-width: 250px;
+    white-space: normal;
+    font-size: 13px;
+}
+
+.unity-text-field__label {
+    min-width: 75px;
+}
+
+.unity-property-field__label {
+    min-width: 75px;
+}
+
+.unity-text-element {
+    color: #dddddd;
+} 
