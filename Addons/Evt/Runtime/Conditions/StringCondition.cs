@@ -8,6 +8,10 @@ namespace PeartreeGames.TriggerGraph.Evt
     {
         [SerializeField] private EvtVariable<string> variable;
         [SerializeField] private string target;
-        public override bool CheckIsSatisfied(TriggerContext ctx) => variable.Value == target;
+        public override bool CheckIsSatisfied(TriggerContext ctx)
+        {
+            if (string.IsNullOrEmpty(variable?.Value) && string.IsNullOrEmpty(target)) return true;
+            return variable?.Value == target;
+        }
     }
 }
