@@ -23,6 +23,7 @@ namespace PeartreeGames.TriggerGraph.Evt
                 ArithmeticOperator.Multiply => variable.Value * value,
                 ArithmeticOperator.Divide => variable.Value / value,
                 ArithmeticOperator.Modulo => variable.Value % value,
+                ArithmeticOperator.Set => value,
                 _ => throw new ArgumentOutOfRangeException()
             };
             variable.Value = result;
