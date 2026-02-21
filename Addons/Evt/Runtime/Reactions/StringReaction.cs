@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using PeartreeGames.Evt.Variables;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
+    [Serializable]
     [SearchTree("Reaction/Evt/String Reaction")]
     public class StringReaction : ReactionNode
     {

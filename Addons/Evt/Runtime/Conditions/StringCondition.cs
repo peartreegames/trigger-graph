@@ -1,8 +1,10 @@
-﻿using PeartreeGames.Evt.Variables;
+﻿using System;
+using PeartreeGames.Evt.Variables;
 using UnityEngine;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
+    [Serializable]
     [SearchTree("Condition/Evt/String Condition")]
     public class StringCondition : ConditionNode
     {

@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using PeartreeGames.Evt.Variables;
 
 namespace PeartreeGames.TriggerGraph.Evt
 {
+    [Serializable]
     [SearchTree("Condition/Evt/Bool Condition")]
     public class BoolCondition : ConditionNode
     {
